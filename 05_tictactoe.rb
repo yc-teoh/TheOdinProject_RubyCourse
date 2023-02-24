@@ -8,6 +8,9 @@ module TicTacToe
     
         status = ""
         attr_accessor :status
+
+        green_light = false
+        attr_accessor :green_light
         
         def initialize(p1, p2)
             @p1 = p1
@@ -35,13 +38,16 @@ module TicTacToe
             box.each do |key, value|
                 if key == choice
                     is_valid_tile = true
-                    puts "VALID TILE"
+                    puts "#{key}: VALID TILE"
+                    break
+
                 else
                     is_valid_tile = false
-                    puts "INVALID TILE"
+                    puts "#{key}: INVALID TILE"
+
                 end
             end
-
+            
             return is_valid_tile
         end
 
@@ -52,13 +58,18 @@ module TicTacToe
             box.each do |key, value|
                 if key == choice
                     if value == " "
-                        puts "VACANT TILE"
+                        puts "#{key}: VACANT TILE"
+                        is_valid_tile = true
+                        break
+
                     else
-                        puts "OCCUPIED TILE" 
+                        puts "#{key}: OCCUPIED TILE"
+                        is_valid_tile = false
+
                     end
                 end
             end
-
+            p is_valid_tile
             return is_valid_tile
         end
     end
@@ -126,12 +137,24 @@ while g.status != "END" do
     tb.populate_board(g.box)
 
     if p1.p_status == "TURN"
-        p "[P1] Please enter your choice of tile:"
-        choice = gets.chomp
-        # p "#{choice} selected!\n"
-        g.check_valid_tile(choice)
-        g.check_valid_tile(choice)
-        p1.tile.append(choice)
+        g.green_light = false
+
+        while g.green_light == false do
+            p "[P1:#{p1.name}] Please enter your choice of tile:"
+            choice = gets.chomp
+
+            if g.check_valid_tile(choice) == true
+                puts "step 1 clear"
+                if g.check_occupied_tile(choice) == true
+                    puts "step 2 clear"
+                    p1.tile.append(choice)
+                    g.green_light = true
+                end
+            else
+                puts "o omegalul"
+            end
+        end
+
         g.box[choice] = "O"
 
         # p p1.tile
@@ -140,12 +163,24 @@ while g.status != "END" do
         p2.p_status = "TURN"
 
     elsif p2.p_status == "TURN"
-        p "[P2] Please enter your choice of tile:"
-        choice = gets.chomp
-        # p "#{choice} selected!"
-        g.check_valid_tile(choice)
-        g.check_valid_tile(choice)
-        p2.tile.append(choice)
+        g.green_light = false
+
+        while g.green_light == false do
+            p "[P2:#{p2.name}] Please enter your choice of tile:"
+            choice = gets.chomp
+
+            if g.check_valid_tile(choice) == true
+                puts "step 1 clear"
+                if g.check_occupied_tile(choice) == true
+                    puts "step 2 clear"
+                    p1.tile.append(choice)
+                    g.green_light = true
+                end
+            else
+                puts "o omegalul"
+            end
+        end
+
         g.box[choice] = "X"
 
         # p p2.tile
