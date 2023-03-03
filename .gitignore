@@ -57,3 +57,6 @@ build-iPhoneSimulator/
 
 # macOS Specific
 .DS_Store
+
+# 07_event_manager output files
+/07_event_manager/output
